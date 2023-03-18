@@ -17,7 +17,6 @@ const AyoFoods = {
 
 
 
-
 const orderHistory = [];
 
 const sessionMiddleware = session({
@@ -66,7 +65,7 @@ io.on("connection", (socket) => {
         // Save the user's name and update the welcome message
         state.userName = message;
         await botMessage(
-          `Welcome to the ChatBot, ${state.userName}! Place an order\n1. Typehere\n99. Typehere\n98. Typehere\n97. Typehere\n0. Cancel order`
+          `Welcome to the ChatBot, ${state.userName}! To Place an order Press\n1. To checkout order Press\n99. To see order history Press\n98. To see current order Press\n97.   To Cancel order Press\n0.`
         );
       } else {
         switch (message) {
