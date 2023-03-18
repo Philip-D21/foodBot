@@ -19,14 +19,23 @@ const AyoFoods = {
 
 const orderHistory = [];
 
+
 const sessionMiddleware = session({
   secret: "secret-key",
   resave: false,
   saveUninitialized: true,
+  cookie: {
+    secure: false,
+    // secure expiry time for session to 7 days
+    maxAge: 60 * 60 * 24 * 7,
+  },
 });
 
+// using session middleware 
 app.use(express.static("public"));
 app.use(sessionMiddleware);
+io.engine.use(sessionMiddleware);
+
 
 app.get("/", async (req, res) => {
     try {
@@ -38,7 +47,7 @@ app.get("/", async (req, res) => {
       // Return a 500 status code with an error message if the file cannot be served
       res.status(500).send("Error serving restaurant.html");
     }
-  });
+});
 
 io.use((socket, next) => {
   sessionMiddleware(socket.request, socket.request.res, next);
@@ -65,7 +74,7 @@ io.on("connection", (socket) => {
         // Save the user's name and update the welcome message
         state.userName = message;
         await botMessage(
-          `Welcome to the ChatBot, ${state.userName}! To Place an order Press\n1. To checkout order Press\n99. To see order history Press\n98. To see current order Press\n97.   To Cancel order Press\n0.`
+          `Welcome to the ChatBot, ${state.userName}!\n1 To Place an order \n99 To checkout order \n98 To see order history \n97 To see current order \n0 To Cancel order.`
         );
       } else {
         switch (message) {
